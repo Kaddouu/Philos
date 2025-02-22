@@ -6,7 +6,7 @@
 /*   By: ilkaddou <ilkaddou@42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/18 21:42:46 by ilkaddou          #+#    #+#             */
-/*   Updated: 2025/02/22 14:07:24 by ilkaddou         ###   ########.fr       */
+/*   Updated: 2025/02/22 17:24:10 by ilkaddou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 void	error(char *msg)
 {
-	printf(RED"Error: %s\n"RESET, msg);
+	printf(RED "Error: %s\n" RESET, msg);
 	exit(1);
 }
 
@@ -37,10 +37,15 @@ void	smart_sleep(long time)
 
 void	print_msg(t_philo *philo, char *msg)
 {
+	bool	should_print;
+
 	pthread_mutex_lock(&philo->data->print_lock);
-	if (!should_stop(philo->data))
+	pthread_mutex_lock(&philo->data->stop_lock);
+	should_print = !philo->data->stop;
+	if (should_print)
 		printf("%ld %d %s\n", get_time() - philo->data->start_time, philo->id,
 			msg);
+	pthread_mutex_unlock(&philo->data->stop_lock);
 	pthread_mutex_unlock(&philo->data->print_lock);
 }
 

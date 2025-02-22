@@ -6,7 +6,7 @@
 /*   By: ilkaddou <ilkaddou@42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/22 12:57:42 by ilkaddou          #+#    #+#             */
-/*   Updated: 2025/02/22 14:25:09 by ilkaddou         ###   ########.fr       */
+/*   Updated: 2025/02/22 17:17:29 by ilkaddou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,8 @@ static bool	should_continue_eating(t_philo *philo)
 
 	data = philo->data;
 	pthread_mutex_lock(&philo->meal_lock);
-	if (!philo->is_full && philo->meals < data->meals_to_eat)
+	if (!philo->is_full && (data->meals_to_eat == -1
+			|| philo->meals < data->meals_to_eat))
 		continue_eating = true;
 	else
 		continue_eating = false;
@@ -74,17 +75,20 @@ void	*philo_routine(void *arg)
 	t_philo	*philo;
 
 	philo = (t_philo *)arg;
-	philo->last_meal = get_time();
 	if (philo->data->philo_count == 1)
 	{
 		handle_one_philo(philo);
 		return (NULL);
 	}
+	if (philo->id % 2 == 0)
+		usleep(1000);
 	while (!should_stop(philo->data))
 	{
 		if (!should_continue_eating(philo))
 			break ;
 		handle_eating(philo);
+		if (should_stop(philo->data))
+			break ;
 		handle_sleeping(philo);
 	}
 	return (NULL);

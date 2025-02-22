@@ -6,7 +6,7 @@
 /*   By: ilkaddou <ilkaddou@42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/18 21:17:37 by ilkaddou          #+#    #+#             */
-/*   Updated: 2025/02/22 13:26:06 by ilkaddou         ###   ########.fr       */
+/*   Updated: 2025/02/22 16:48:18 by ilkaddou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,11 +31,11 @@ typedef struct s_fork
 
 typedef struct s_philo
 {
+	pthread_mutex_t	meal_lock;
 	int				id;
 	long			meals;
 	long			last_meal;
 	bool			is_full;
-	pthread_mutex_t	meal_lock;
 	t_fork			*first;
 	t_fork			*second;
 	struct s_data	*data;

@@ -6,7 +6,7 @@
 /*   By: ilkaddou <ilkaddou@42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/21 15:57:53 by ilkaddou          #+#    #+#             */
-/*   Updated: 2025/02/22 14:04:10 by ilkaddou         ###   ########.fr       */
+/*   Updated: 2025/02/22 17:22:21 by ilkaddou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,8 +24,10 @@ void	clean_data(t_data *data)
 	}
 	pthread_mutex_destroy(&data->stop_lock);
 	pthread_mutex_destroy(&data->print_lock);
-	free(data->philos);
-	free(data->forks);
+	if (data->philos != NULL)
+		free(data->philos);
+	if (data->forks != NULL)
+		free(data->forks);
 }
 
 int	start_simulation(t_data *data)
@@ -42,10 +44,8 @@ int	start_simulation(t_data *data)
 	while (++i < data->philo_count)
 	{
 		data->philos[i].last_meal = data->start_time;
-		if (pthread_create(&threads[i], NULL, philo_routine,
-				&data->philos[i]))
+		if (pthread_create(&threads[i], NULL, philo_routine, &data->philos[i]))
 			return (1);
-		usleep(1000);
 	}
 	if (pthread_create(&monitor, NULL, monitor_routine, data))
 		return (1);

@@ -6,7 +6,7 @@
 /*   By: ilkaddou <ilkaddou@42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/18 21:37:22 by ilkaddou          #+#    #+#             */
-/*   Updated: 2025/02/22 13:23:57 by ilkaddou         ###   ########.fr       */
+/*   Updated: 2025/02/22 19:33:17 by ilkaddou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,14 +32,14 @@ static long	ft_atol(const char *nptr)
 		if (*nptr == '+')
 			nptr++;
 	}
-	if (!ft_isdigit(*nptr))
-		error("Not a digit");
-	while (*nptr && ft_isdigit(*nptr))
+	while (*nptr)
 	{
+		if (!ft_isdigit(*nptr))
+			error("Not a digit");
 		prev = nbr;
 		nbr = nbr * 10 + (*nptr++ - '0');
 		if (nbr < prev || nbr > INT_MAX)
-			error("Number overflow");
+			error("Integer Overflow");
 	}
 	return (nbr);
 }
@@ -61,7 +61,7 @@ void	ft_parse(t_data *data, char **av)
 	if (av[5])
 	{
 		data->meals_to_eat = ft_atol(av[5]);
-		if (data->meals_to_eat < 0)
+		if (data->meals_to_eat <= 0)
 			error("Invalid number of meals");
 	}
 	else
